@@ -7,3 +7,12 @@ Accept: application/json
 
 GET {{BudgetApp.API_HostAddress}}/
 Accept: application/json
+
+###
+
+POST {{BudgetApp.API_HostAddress}}/transactions
+{
+    "description": "Groceries",
+    "amount": 42.50,
+    "date": "2026-04-08T00:00:00Z"
+}

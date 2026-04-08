@@ -1,6 +1,7 @@
 using Npgsql;
 using Microsoft.EntityFrameworkCore;
 using BudgetApp.API.Data;
+using BudgetApp.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 //configures the application to use the appsettings.json file for configuration settings. This allows the application to read configuration values from that file, such as connection strings, API keys, or other settings that are needed for the application to run.
@@ -47,6 +48,14 @@ var summaries = new[]
 };
 
 app.MapGet("/", () => "Hello World!").WithName("HelloWorld").WithOpenApi();
+app.MapGet("/transactions", async (AppDbContext db) =>
+{
+    var transactions = await db.Transactions.ToListAsync();
+    return Results.Ok(transactions);
+})
+    .WithName("GetTransactions")
+    .WithOpenApi(); 
+    
 app.MapGet("/weatherforecast", () =>
 {
     var forecast =  Enumerable.Range(1, 5).Select(index =>
@@ -61,6 +70,13 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapPost("/transactions", async (AppDbContext db, Transaction transaction) =>
+{
+    db.Transactions.Add(transaction);
+    await db.SaveChangesAsync();
+    return Results.Created($"/transactions/{transaction.Id}", transaction);
+});
 
 app.Run();
 
