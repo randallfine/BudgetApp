@@ -1,5 +1,19 @@
+using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
+//configures the application to use the appsettings.json file for configuration settings. This allows the application to read configuration values from that file, such as connection strings, API keys, or other settings that are needed for the application to run.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"Connection string: {connectionString}");
+using var connection = new NpgsqlConnection(connectionString);
 
+try
+{
+    await connection.OpenAsync();
+    Console.WriteLine("Database connection successful");
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
