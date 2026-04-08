@@ -2,7 +2,13 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 //configures the application to use the appsettings.json file for configuration settings. This allows the application to read configuration values from that file, such as connection strings, API keys, or other settings that are needed for the application to run.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine($"Connection string: {connectionString}");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("ConnectionStrings:DefaultConnection is not configured. Set it with dotnet user-secrets for local development.");
+}
+
+Console.WriteLine("Attempting database connection...");
 using var connection = new NpgsqlConnection(connectionString);
 
 try
