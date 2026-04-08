@@ -1,4 +1,7 @@
 using Npgsql;
+using Microsoft.EntityFrameworkCore;
+using BudgetApp.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 //configures the application to use the appsettings.json file for configuration settings. This allows the application to read configuration values from that file, such as connection strings, API keys, or other settings that are needed for the application to run.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -24,6 +27,8 @@ catch (Exception ex)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
