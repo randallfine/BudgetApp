@@ -1,4 +1,3 @@
-using Npgsql;
 using Microsoft.EntityFrameworkCore;
 using BudgetApp.API.Data;
 using BudgetApp.API.Models;
@@ -10,19 +9,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     throw new InvalidOperationException("ConnectionStrings:DefaultConnection is not configured. Set it with dotnet user-secrets for local development.");
-}
-
-Console.WriteLine("Attempting database connection...");
-using var connection = new NpgsqlConnection(connectionString);
-
-try
-{
-    await connection.OpenAsync();
-    Console.WriteLine("Database connection successful");
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
 }
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,7 +36,7 @@ var summaries = new[]
 app.MapGet("/", () => "Hello World!").WithName("HelloWorld").WithOpenApi();
 app.MapGet("/transactions", async (AppDbContext db) =>
 {
-    var transactions = await db.Transactions.ToListAsync();
+    var transactions = await db.TransactionEntities.ToListAsync();
     return Results.Ok(transactions);
 })
     .WithName("GetTransactions")
@@ -71,9 +57,9 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.MapPost("/transactions", async (AppDbContext db, Transaction transaction) =>
+app.MapPost("/transactions", async (AppDbContext db, TransactionEntity transaction) =>
 {
-    db.Transactions.Add(transaction);
+    db.TransactionEntities.Add(transaction);
     await db.SaveChangesAsync();
     return Results.Created($"/transactions/{transaction.Id}", transaction);
 });

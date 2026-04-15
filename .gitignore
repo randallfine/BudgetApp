@@ -1,23 +1,64 @@
 # Build outputs
-bin/
-obj/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+publish/
+artifacts/
 
 # User-specific files
 *.user
 *.rsuser
 *.suo
+*.userosscache
+*.sln.docstates
 
 # IDE folders
 .vs/
 .vscode/
+.idea/
 
-# Logs
+# Logs and diagnostics
 *.log
+*.trace
+*.stackdump
+*.pid
+
+# Test and coverage artifacts
+TestResults/
+coverage/
+coverage-*/
+*.coverage
+*.coveragexml
 
 # OS files
 .DS_Store
 Thumbs.db
 
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+secrets.json
+*.local
+
+# Certificates and keys
+*.pfx
+*.p12
+*.snk
+*.pem
+*.key
+*.crt
+*.cer
+
+# Package and tool caches
+node_modules/
+.nuget/
+.sass-cache/
+
 # Local tooling
 .agents/
 .codex
+supabase/.temp/
